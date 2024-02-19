@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Example</title>
+</head>
+<body>
+  <h1>WebSocket Connection</h1>
+  <button id="connectButton">Connect</button>
+  <div id="messageOutput"></div>
+  <script>
+    const connectButton = document.getElementById('connectButton');
+    const messageOutput = document.getElementById('messageOutput');
+
+    connectButton.addEventListener('click', () => {
+      // Define the Websocket server URL
+      const wsUri = "ws://localhost:8080";
+
+      // Create a new WebSocket object
+      const ws = new WebSocket(wsUri);
+
+      // Handle connection opening
+      ws.onopen = () => {
+        messageOutput.textContent = "Connection opened!";
+        // Optionally, send a message to the server after connecting
+        ws.send("Hello from the client!");
+      };
+
+      // Handle incoming messages
+      ws.onmessage = (event) => {
+        messageOutput.textContent = `Received message: ${event.data}`;
+      };
+
+      // Handle connection closing (errors, disconnects)
+      ws.onclose = (event) => {
+        messageOutput.textContent = `Connection closed. Code: ${event.code}, Reason: ${event.reason}`;
+      };
+
+      // Handle connection errors
+      ws.onerror = (error) => {
+        messageOutput.textContent = `Error: ${error.message}`;
+      };
+    });
+  </script>
+</body>
+</html>
